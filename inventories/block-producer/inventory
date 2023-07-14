@@ -1,2 +1,2 @@
 [node]
-127.0.0.1 ansible_user=deploy
+192.168.1.10 ansible_user=deploy

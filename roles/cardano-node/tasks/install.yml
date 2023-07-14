@@ -106,13 +106,13 @@
     - install
     - node
 
-- name: "Node Install | Delete cardano-node build directory"
-  file:
-    state: absent
-    path: /home/{{ server_username }}/cardano-node
-  tags:
-    - install
-    - node
+#- name: "Node Install | Delete cardano-node build directory"
+#  file:
+#    state: absent
+#    path: /home/{{ server_username }}/cardano-node
+#  tags:
+#    - install
+#    - node
 
 - name: "Node Install | Git checkout Cardano source release version {{ cardano_version_tag }}"
   git:
@@ -185,29 +185,10 @@
     - install
     - node
 
-- name: "Node Install | Stop cardano-node service"
-  systemd:
-    name: cardano-node.service
-    state: stopped
-  tags:
-    - binaries
-    - install
-    - node
-
 - name: "Node Install | Copy binaries to /usr/bin for systemd control"
   shell: |
     cp $(find /home/{{ server_username }}/cardano-node/dist-newstyle/build -type f -name "cardano-cli") /usr/bin/cardano-cli
     cp $(find /home/{{ server_username }}/cardano-node/dist-newstyle/build -type f -name "cardano-node") /usr/bin/cardano-node
-  tags:
-    - binaries
-    - install
-    - node
-
-- name: "Node Install | Start cardano-node service"
-  systemd:
-    name: cardano-node.service
-    state: started
-    enabled: yes
   tags:
     - binaries
     - install
@@ -269,7 +250,7 @@
     - api
 
 - name: "Node API Install | Install tx-api.sh startup script"
-  template: src={{ role_path }}/templates/tx-api.sh.j2 dest={{ cardano_scripts_dir }}/tx-api.sh mode=u=rw,g=r,o= owner={{ server_username }} group={{ server_username }}
+  template: src={{ role_path }}/templates/tx-api.sh.j2 dest={{ cardano_scripts_dir }}/tx-api.sh mode=u=rwx,g=r,o= owner={{ server_username }} group={{ server_username }}
   tags:
     - install
     - api
