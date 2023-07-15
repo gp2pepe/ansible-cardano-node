@@ -135,7 +135,7 @@
   systemd:
     name: cardano-node.service
     state: stopped
-    enabled: no
+    enabled: yes
   tags:
     - configure
     - service
@@ -157,3 +157,23 @@
   tags:
     - configure
     - poolmeta
+
+- name: "Configure Node | Install gLiveView monitoring tool"
+  get_url:
+    url: "{{ cardano_community_gliveview }}"
+    dest: "{{ cardano_install_dir }}/scripts/gLiveView.sh"
+    mode: 0755
+  become_user: "{{ server_username }}"
+  tags:
+    - configure
+    - gLive
+
+- name: "Configure Node | Install gLiveView environment"
+  get_url:
+    url: "{{ cardano_community_gliveview_env }}"
+    dest: "{{ cardano_install_dir }}/scripts/env"
+    mode: 0755
+  become_user: "{{ server_username }}"
+  tags:
+    - configure
+    - gLive

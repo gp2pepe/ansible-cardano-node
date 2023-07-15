@@ -1,5 +1,5 @@
-.DS_Store
-.vagrant/
-__pycache__
-*.cache
-*.retry
+/.vscode
+.vault_pass.txt
+inventories/relay-node/inventory
+inventories/block-producer/inventory
+roles/ssh/defaults/main.yml
