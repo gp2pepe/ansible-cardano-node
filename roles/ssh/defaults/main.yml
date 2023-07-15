@@ -1,0 +1,3 @@
+---
+
+ssh_allowed_users: "AllowUsers deploy@192.168.0.0/16"
