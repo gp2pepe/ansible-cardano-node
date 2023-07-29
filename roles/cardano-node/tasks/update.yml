@@ -1,0 +1,72 @@
+
+- name: "Node update | Stop Cardano service "
+  systemd:
+    name: cardano-node.service
+    state: stopped
+    enabled: yes
+  tags:
+    - update
+
+- name: "Node update | Release version {{ cardano_version_tag }}"
+  debug:
+    var: cardano_version_tag
+  check_mode: false
+  tags:
+    - update
+
+- name: "Node update | Delete cardano-node build directory"
+  when: true
+  file:
+    state: absent
+    path: /home/{{ server_username }}/cardano-node
+  tags:
+    - update
+
+- name: "Node update | Git checkout Cardano source release version {{ cardano_version_tag }}"
+  git:
+    repo: "{{ cardano_github_repo }}"
+    dest: /home/{{ server_username }}/cardano-node
+    clone: yes
+    version: "{{ cardano_version_tag }}"
+    accept_hostkey: yes
+  register: repo_download
+  tags:
+    - update
+
+- name: "Node update | Create cabal.project.local at toplevel"
+  template:
+    src: "{{ role_path }}/templates/cabal.project.local.j2"
+    dest: "/home/{{ server_username }}/cardano-node/cabal.project.local"
+    owner: "{{ server_username }}"
+    group: "{{ server_username }}"
+    mode: 0644
+  tags:
+    - update
+
+- name: "Node update | Update Cabal in {{ server_username }} home directory"
+  shell: cd /home/{{ server_username }}/cardano-node && cabal update
+  tags:
+    - update
+
+
+- name: "Node update | Building Cardano node"
+  shell: cd /home/{{ server_username }}/cardano-node && cabal build cardano-node cardano-cli
+  tags:
+    - update
+
+
+- name: "Node update | Copy binaries to /usr/bin for systemd control"
+  shell: |
+    cp $(find /home/{{ server_username }}/cardano-node/dist-newstyle/build -type f -name "cardano-cli") /usr/bin/cardano-cli
+    cp $(find /home/{{ server_username }}/cardano-node/dist-newstyle/build -type f -name "cardano-node") /usr/bin/cardano-node
+  tags:
+    - update
+
+
+- name: "Node update | Start Cardano service "
+  systemd:
+    name: cardano-node.service
+    state: started
+    enabled: yes
+  tags:
+    - update

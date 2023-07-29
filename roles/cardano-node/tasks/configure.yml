@@ -52,16 +52,6 @@
   tags:
     - configure
 
-- name: "Configure Node | Copy scripts directory for node c/w all files"
-  copy:
-    src: cardano-scripts/
-    dest: "{{ cardano_scripts_dir }}"
-    owner: "{{ server_username }}"
-    group: "{{ server_username }}"
-    mode: 0704
-  tags:
-    - configure
-
 - name: "Cardano Node | Copy startup template to scripts directory"
   template:
     src: "{{ role_path }}/templates/start-node.sh.j2"

@@ -194,6 +194,18 @@
     - install
     - node
 
+- name: "Node Install | Copy scripts directory for node c/w all files"
+  copy:
+    src: cardano-scripts/
+    dest: "{{ cardano_scripts_dir }}"
+    owner: "{{ server_username }}"
+    group: "{{ server_username }}"
+    mode: 0704
+  tags:
+    - install
+    - api
+
+
 - name: "Node API Install | Update cabal"
   shell: cabal update
   when:
@@ -248,6 +260,7 @@
   tags:
     - install
     - api
+
 
 - name: "Node API Install | Install tx-api.sh startup script"
   template: src={{ role_path }}/templates/tx-api.sh.j2 dest={{ cardano_scripts_dir }}/tx-api.sh mode=u=rwx,g=r,o= owner={{ server_username }} group={{ server_username }}
