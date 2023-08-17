@@ -1,5 +1,5 @@
 ![ansible-cardano](https://user-images.githubusercontent.com/84546123/137635107-1b183f63-3cac-4ef9-be9e-3f116cb79aef.png)
-
+![Gaucho Quest](https://gaucho.quest/wp-content/uploads/2023/08/gaucho_cardano_largo-e1692236016273.jpeg)
 ## Overview
 
 The [Ansible cardano-node](https://github.com/moaipool/ansible-cardano-node) repository contains an [Ansible](https://www.ansible.com/) playbook for provisioning secure, optimized Cardano nodes for Stake Pool Operators (SPOs). It was originally developed by the [MOAI Pool](https://moaipool.com/) (Ticker: **MOAI**) operators but is now being made available to the greater Cardano community.
