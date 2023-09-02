@@ -2,6 +2,7 @@
 - include: install.yml
 - include: configure.yml
 - include: update.yml
+- include: api.yml
 - include: administer.yml
   when: "'block-producer' in inventory_dir"
 - include: relay.yml
