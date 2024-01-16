@@ -98,6 +98,51 @@
     force: yes
   tags:
     - install
+
+- name: "Node Install | Installing BLST - Clone"
+  git:
+    repo: "{{ blst_github_url }}"
+    dest: /home/{{ server_username }}/blst
+    clone: yes
+    version: "{{ blst_version_tag }}"
+    accept_hostkey: yes
+  register: repo_download
+  tags:
+    - install
+    - node
+    - git
+    - blst
+
+- name: "Node Install | Installing BLST - Build"
+  shell: cd /home/{{ server_username }}/blst && ./build.sh
+  tags:
+    - install
+    - node
+    - blst
+
+- name: "Node Install | Installing BLST - Configure"
+  shell: |
+      cd /home/{{ server_username }}/blst 
+      cat > libblst.pc << EOF
+      prefix=/usr/local
+      exec_prefix=\${prefix}
+      libdir=\${exec_prefix}/lib
+      includedir=\${prefix}/include
+
+      Name: libblst
+      Description: Multilingual BLS12-381 signature library
+      URL: https://github.com/supranational/blst
+      Version: 0.3.10
+      Cflags: -I\${includedir}
+      Libs: -L\${libdir} -lblst
+      EOF
+      sudo cp libblst.pc /usr/local/lib/pkgconfig/
+      sudo cp bindings/blst_aux.h bindings/blst.h bindings/blst.hpp  /usr/local/include/
+      sudo cp libblst.a /usr/local/lib
+  tags:
+    - install
+    - node
+    - blst
         
 - name: "Node Install | Release version {{ cardano_version_tag }}"
   debug:
